@@ -54,6 +54,38 @@ namespace PhageVirus.Modules
                 
                 isRunning = true;
                 EnhancedLogger.LogInfo($"PhageVirus mesh network started. Node ID: {LocalNodeId}", Console.WriteLine);
+                
+                // Send telemetry to cloud for mesh network status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var meshData = new
+                        {
+                            local_node_id = LocalNodeId,
+                            sync_port = SyncPort,
+                            sync_group = SyncGroup,
+                            shared_threats_count = SharedThreats.Count,
+                            peer_last_seen_count = PeerLastSeen.Count,
+                            threat_type = "mesh_network_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("PhageSync", "mesh_network_status", meshData, ThreatLevel.Normal);
+                        
+                        // Get cloud mesh network analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("PhageSync", meshData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud mesh network analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud mesh network analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

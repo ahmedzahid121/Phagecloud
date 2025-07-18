@@ -61,6 +61,37 @@ namespace PhageVirus.Modules
             
             // Set up filtering
             SetupFiltering();
+            
+            // Send telemetry to cloud for log viewer status
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var logViewerData = new
+                    {
+                        log_entries_count = logEntries.Count,
+                        current_filter = currentFilter,
+                        current_log_type = currentLogType,
+                        current_severity = currentSeverity,
+                        is_auto_refresh = isAutoRefresh,
+                        threat_type = "log_viewer_status",
+                        timestamp = DateTime.UtcNow
+                    };
+
+                    await CloudIntegration.SendTelemetryAsync("LogViewer", "log_viewer_status", logViewerData, ThreatLevel.Normal);
+                    
+                    // Get cloud log viewer analysis
+                    var analysis = await CloudIntegration.GetCloudAnalysisAsync("LogViewer", logViewerData);
+                    if (analysis.Success)
+                    {
+                        EnhancedLogger.LogInfo($"Cloud log viewer analysis: {analysis.Analysis}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnhancedLogger.LogWarning($"Cloud log viewer analysis failed: {ex.Message}");
+                }
+            });
         }
 
         private void CreateUI()

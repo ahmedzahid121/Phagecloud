@@ -123,6 +123,37 @@ namespace PhageVirus.Modules
                 Task.Run(ProcessCommands);
                 
                 EnhancedLogger.LogInfo("Live Command Shell started", Console.WriteLine);
+                
+                // Send telemetry to cloud for command shell status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var commandShellData = new
+                        {
+                            command_handlers_count = CommandHandlers.Count,
+                            command_history_count = CommandHistory.Count,
+                            restricted_commands_count = RestrictedCommands.Length,
+                            command_threat_patterns_count = CommandThreatPatterns.Count,
+                            threat_type = "command_shell_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("LiveCommandShell", "command_shell_status", commandShellData, ThreatLevel.Normal);
+                        
+                        // Get cloud command shell analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("LiveCommandShell", commandShellData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud command shell analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud command shell analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

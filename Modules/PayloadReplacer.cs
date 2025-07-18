@@ -12,6 +12,37 @@ namespace PhageVirus.Modules
         {
             try
             {
+                // Send telemetry to cloud for payload neutralization
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var neutralizationData = new
+                        {
+                            threat_file = threat.File,
+                            threat_type = threat.Type,
+                            threat_level = threat.Level,
+                            threat_description = threat.Description,
+                            neutralization_action = "neutralize",
+                            threat_type_telemetry = "payload_neutralization",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("PayloadReplacer", "payload_neutralization", neutralizationData, ThreatLevel.High);
+                        
+                        // Get cloud neutralization analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("PayloadReplacer", neutralizationData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud neutralization analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud neutralization analysis failed: {ex.Message}");
+                    }
+                });
+
                 if (threat.Type == "Process")
                 {
                     return NeutralizeProcessAdvanced(threat);

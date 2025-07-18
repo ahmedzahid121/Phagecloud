@@ -74,6 +74,36 @@ namespace PhageVirus.Modules
                 Task.Run(MonitorHoneyProcesses);
                 
                 EnhancedLogger.LogInfo($"Started {ActiveHoneyProcesses.Count} honey processes", Console.WriteLine);
+                
+                // Send telemetry to cloud for honey process status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var honeyData = new
+                        {
+                            active_honey_processes_count = ActiveHoneyProcesses.Count,
+                            process_info_count = ProcessInfo.Count,
+                            target_applications_count = TargetApplications.Length,
+                            threat_type = "honey_process_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("HoneyProcess", "honey_process_status", honeyData, ThreatLevel.Normal);
+                        
+                        // Get cloud honey process analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("HoneyProcess", honeyData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud honey process analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud honey process analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

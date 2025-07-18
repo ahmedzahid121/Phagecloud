@@ -90,8 +90,8 @@ namespace PhageVirus
             SetupOptimizedTimers();
             
             // Initialize UI
-            LogBox.AppendText("PhageVirus - Biological Virus Hunter Initialized\n");
-            LogBox.AppendText("Starting lightweight autonomous threat hunting...\n");
+            LogBox.AppendText("PhageVirus - Unified Cloud-Enabled Virus Hunter Initialized\n");
+            LogBox.AppendText("Starting unified module manager with cloud integration...\n");
             
             // Check for elevated privileges
             if (!SystemHacker.IsElevated())
@@ -103,16 +103,10 @@ namespace PhageVirus
             // Load configuration
             LoadConfiguration();
             
-            // Start staggered module activation (optimized startup sequence)
-            await StartStaggeredModulesAsync();
+            // Initialize and start unified module manager
+            await InitializeUnifiedModuleManagerAsync();
             
-            // Start behavior test (only if enabled)
-            if (appConfig?.Modules.BehaviorTest == true)
-            {
-                BehaviorTest.StartBehaviorTest();
-            }
-            
-            EnhancedLogger.LogInfo("PhageVirus lightweight hunter started with optimized resource usage", LogBox.AppendText);
+            EnhancedLogger.LogInfo("PhageVirus unified hunter started with cloud integration", LogBox.AppendText);
         }
 
         private void InitializeModuleStatuses()
@@ -197,6 +191,70 @@ namespace PhageVirus
             }
         }
         
+        private async Task InitializeUnifiedModuleManagerAsync()
+        {
+            try
+            {
+                LogBox.AppendText("Initializing unified module manager...\n");
+                
+                // Initialize unified module manager
+                await UnifiedModuleManager.Instance.InitializeAsync();
+                
+                // Start the unified module manager
+                await UnifiedModuleManager.Instance.StartAsync();
+                
+                LogBox.AppendText("Unified module manager started successfully\n");
+                
+                // Update module statuses from unified manager
+                UpdateModuleStatusesFromUnifiedManager();
+                
+                // Start behavior test if enabled in unified config
+                var config = UnifiedConfig.Instance;
+                if (config.IsModuleEnabled("BehaviorTest"))
+                {
+                    BehaviorTest.StartBehaviorTest();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogBox.AppendText($"ERROR: Failed to initialize unified module manager: {ex.Message}\n");
+                EnhancedLogger.LogError($"Unified module manager initialization failed: {ex.Message}", LogBox.AppendText);
+            }
+        }
+
+        private void UpdateModuleStatusesFromUnifiedManager()
+        {
+            try
+            {
+                var unifiedStatuses = UnifiedModuleManager.Instance.GetModuleStatus();
+                
+                foreach (var kvp in unifiedStatuses)
+                {
+                    var moduleName = kvp.Key;
+                    var status = kvp.Value;
+                    
+                    if (moduleStatuses.ContainsKey(moduleName))
+                    {
+                        moduleStatuses[moduleName].Status = status.Health;
+                        moduleStatuses[moduleName].LastUpdate = status.LastActivity;
+                    }
+                    else
+                    {
+                        moduleStatuses[moduleName] = new ModuleStatus
+                        {
+                            Name = status.Name,
+                            Status = status.Health,
+                            LastUpdate = status.LastActivity
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnhancedLogger.LogWarning($"Failed to update module statuses: {ex.Message}", LogBox.AppendText);
+            }
+        }
+
         private async Task StartStaggeredModulesAsync()
         {
             try

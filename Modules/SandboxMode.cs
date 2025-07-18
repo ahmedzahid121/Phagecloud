@@ -89,6 +89,38 @@ namespace PhageVirus.Modules
                     
                     isActive = true;
                     EnhancedLogger.LogSuccess("Sandbox mode activated - monitoring high-risk folders");
+                    
+                    // Send telemetry to cloud for sandbox status
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var sandboxData = new
+                            {
+                                watched_folders_count = WatchedFolders.Length,
+                                blocked_extensions_count = BlockedExtensions.Length,
+                                allowed_extensions_count = AllowedExtensions.Length,
+                                whitelisted_files_count = WhitelistedFiles.Count,
+                                whitelisted_paths_count = WhitelistedPaths.Count,
+                                file_signatures_count = FileSignatures.Count,
+                                threat_type = "sandbox_status",
+                                timestamp = DateTime.UtcNow
+                            };
+
+                            await CloudIntegration.SendTelemetryAsync("SandboxMode", "sandbox_status", sandboxData, ThreatLevel.Normal);
+                            
+                            // Get cloud sandbox analysis
+                            var analysis = await CloudIntegration.GetCloudAnalysisAsync("SandboxMode", sandboxData);
+                            if (analysis.Success)
+                            {
+                                EnhancedLogger.LogInfo($"Cloud sandbox analysis: {analysis.Analysis}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EnhancedLogger.LogWarning($"Cloud sandbox analysis failed: {ex.Message}");
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {

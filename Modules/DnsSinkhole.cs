@@ -782,6 +782,37 @@ namespace PhageVirus.Modules
                 AddToHostsFile(domain);
                 
                 EnhancedLogger.LogWarning($"DNS sinkhole blocked domain: {domain} from {clientIp}", Console.WriteLine);
+                
+                // Send telemetry to cloud for DNS analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var dnsData = new
+                        {
+                            domain = domain,
+                            client_ip = clientIp,
+                            blocked_domains_count = BlockedDomains.Count,
+                            recent_attempts_count = DomainAttempts.Count,
+                            dns_tunnel_sessions_count = DnsTunnelSessions.Count,
+                            threat_type = "malicious_domain",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("DnsSinkhole", "malicious_domain", dnsData, ThreatLevel.High);
+                        
+                        // Get cloud DNS threat intelligence
+                        var threatIntel = await CloudIntegration.GetThreatIntelligenceAsync(domain, "malicious_domain");
+                        if (threatIntel.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud DNS threat intel for {domain}: {threatIntel.ThreatName} - Confidence: {threatIntel.Confidence:P1}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud DNS analysis failed for {domain}: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {

@@ -479,6 +479,41 @@ namespace PhageVirus.Modules
                 // Lightweight handling - just log and monitor
                 EnhancedLogger.LogInfo($"Monitoring suspicious process detected by ML: {data.ProcessName}");
                 
+                // Send telemetry to cloud for ML analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var mlData = new
+                        {
+                            process_name = data.ProcessName,
+                            cpu_usage = data.CpuUsage,
+                            memory_usage = data.MemoryUsage,
+                            file_access_count = data.FileAccessCount,
+                            network_connections = data.NetworkConnections,
+                            registry_access_count = data.RegistryAccessCount,
+                            entropy_score = data.EntropyScore,
+                            thread_count = data.ThreadCount,
+                            handle_count = data.HandleCount,
+                            working_set_size = data.WorkingSetSize,
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("AnomalyScoreClassifier", "suspicious_behavior", mlData, ThreatLevel.Medium);
+                        
+                        // Get cloud ML analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("AnomalyScoreClassifier", mlData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud ML analysis for {data.ProcessName}: Risk Score {analysis.RiskScore:F2} - {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud ML analysis failed for {data.ProcessName}: {ex.Message}");
+                    }
+                });
+                
                 // Don't take aggressive action in lightweight mode
                 // Just add to monitoring list for further observation
             }

@@ -574,6 +574,38 @@ namespace PhageVirus.Modules
                 // Option 2: Overwrite suspicious memory regions (surgical) - DISABLED IN VM
                 // OverwriteSuspiciousMemory(process, suspiciousRegions);
                 
+                // Send telemetry to cloud for memory analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var memoryData = new
+                        {
+                            process_id = process.Id,
+                            process_name = process.ProcessName,
+                            suspicious_regions = suspiciousRegions,
+                            memory_usage = process.WorkingSet64,
+                            thread_count = process.Threads.Count,
+                            handle_count = process.HandleCount,
+                            threat_type = "suspicious_memory",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("MemoryTrap", "suspicious_memory", memoryData, ThreatLevel.High);
+                        
+                        // Get cloud memory analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("MemoryTrap", memoryData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud memory analysis for {process.ProcessName}: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud memory analysis failed for {process.ProcessName}: {ex.Message}");
+                    }
+                });
+                
                 // Option 3: Log and monitor (passive) - SAFE FOR VM
                 EnhancedLogger.LogInfo($"Suspicious memory regions logged for {process.ProcessName}: {string.Join(", ", suspiciousRegions)}");
             }

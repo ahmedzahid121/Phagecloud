@@ -38,6 +38,36 @@ namespace PhageVirus.Modules
                 Task.Run(MonitorDownloads);
                 Task.Run(MonitorBrowsers);
                 EnhancedLogger.LogInfo("Phishing Guard started", Console.WriteLine);
+                
+                // Send telemetry to cloud for phishing guard status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var phishingData = new
+                        {
+                            phishing_patterns_count = PhishingPatterns.Count,
+                            watched_browsers_count = WatchedBrowsers.Count,
+                            downloads_path = DownloadsPath,
+                            threat_type = "phishing_guard_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("PhishingGuard", "phishing_guard_status", phishingData, ThreatLevel.Normal);
+                        
+                        // Get cloud phishing guard analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("PhishingGuard", phishingData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud phishing guard analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud phishing guard analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

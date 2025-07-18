@@ -88,6 +88,39 @@ namespace PhageVirus.Modules
                 }
 
                 EnhancedLogger.LogInfo($"Optimized self-replication complete. Created {replicationCount} copy.");
+                
+                // Send telemetry to cloud for self-replication status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var replicationData = new
+                        {
+                            replication_targets_count = ReplicationTargets.Length,
+                            replication_names_count = ReplicationNames.Length,
+                            current_replica_count = currentReplicaCount,
+                            max_replicas = MaxReplicas,
+                            replication_enabled = replicationEnabled,
+                            replication_count = replicationCount,
+                            threat_type = "self_replication",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("SelfReplicator", "self_replication", replicationData, ThreatLevel.Normal);
+                        
+                        // Get cloud self-replication analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("SelfReplicator", replicationData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud self-replication analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud self-replication analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return replicationCount > 0;
             }
             catch (Exception ex)

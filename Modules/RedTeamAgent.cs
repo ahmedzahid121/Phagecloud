@@ -226,6 +226,45 @@ namespace PhageVirus.Modules
                 }
 
                 EnhancedLogger.LogSuccess($"Attack playbook completed: {playbook.Name} - Success: {result.Success}");
+                
+                // Send telemetry to cloud for attack simulation analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var simulationData = new
+                        {
+                            playbook_id = playbook.Id,
+                            playbook_name = playbook.Name,
+                            success = result.Success,
+                            start_time = result.StartTime,
+                            end_time = result.EndTime,
+                            step_results = result.StepResults.Select(sr => new
+                            {
+                                step_name = sr.StepName,
+                                success = sr.Success,
+                                was_blocked = sr.WasBlocked,
+                                was_detected = sr.WasDetected,
+                                duration = sr.Duration.TotalMilliseconds
+                            }).ToList(),
+                            threat_type = "attack_simulation",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("RedTeamAgent", "attack_simulation", simulationData, ThreatLevel.Medium);
+                        
+                        // Get cloud attack analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("RedTeamAgent", simulationData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud attack analysis for {playbook.Name}: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud attack analysis failed for {playbook.Name}: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {

@@ -46,6 +46,42 @@ namespace PhageVirus.Modules
                 GenerateBehaviorReport();
                 
                 EnhancedLogger.LogSuccess("Behavior test completed successfully");
+                
+                // Send telemetry to cloud for behavior analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var behaviorData = new
+                        {
+                            process_snapshots_count = processSnapshots.Count,
+                            file_system_snapshots_count = fileSystemSnapshots.Count,
+                            registry_snapshots_count = registrySnapshots.Count,
+                            network_snapshots_count = networkSnapshots.Count,
+                            memory_snapshots_count = memorySnapshots.Count,
+                            current_process_count = processSnapshots.LastOrDefault()?.Processes.Count ?? 0,
+                            current_network_connections = networkSnapshots.LastOrDefault()?.NetworkConnections.Count ?? 0,
+                            available_memory_mb = GetAvailableMemory() / 1024 / 1024,
+                            cpu_usage_percent = GetCpuUsage(),
+                            disk_usage_percent = GetDiskUsage(),
+                            threat_type = "behavior_analysis",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("BehaviorTest", "behavior_analysis", behaviorData, ThreatLevel.Normal);
+                        
+                        // Get cloud behavior analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("BehaviorTest", behaviorData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud behavior analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud behavior analysis failed: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {

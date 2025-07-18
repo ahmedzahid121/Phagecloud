@@ -884,6 +884,36 @@ namespace PhageVirus.Modules
             EnhancedLogger.LogWarning($"Credential activity logged: {processName} (PID: {processId})");
             EnhancedLogger.LogInfo($"Command line: {commandLine}");
             EnhancedLogger.LogInfo($"Patterns: {string.Join(", ", patterns)}");
+            
+            // Send telemetry to cloud for credential threat analysis
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var credentialData = new
+                    {
+                        process_id = processId,
+                        process_name = processName,
+                        command_line = commandLine,
+                        patterns = patterns,
+                        threat_type = "credential_theft",
+                        timestamp = DateTime.UtcNow
+                    };
+
+                    await CloudIntegration.SendTelemetryAsync("CredentialTrap", "credential_activity", credentialData, ThreatLevel.Critical);
+                    
+                    // Get cloud threat intelligence
+                    var threatIntel = await CloudIntegration.GetThreatIntelligenceAsync(processName, "credential_theft");
+                    if (threatIntel.Success)
+                    {
+                        EnhancedLogger.LogInfo($"Cloud threat intel for {processName}: {threatIntel.ThreatName} - Confidence: {threatIntel.Confidence:P1}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnhancedLogger.LogWarning($"Cloud credential analysis failed for {processName}: {ex.Message}");
+                }
+            });
         }
 
         private static void BlockCredentialFile(string filePath, string reason)

@@ -237,6 +237,43 @@ namespace PhageVirus.Modules
                 InitializeRealTimeExport();
                 InitializeBehaviorTracking();
                 LogSystemStartup();
+                
+                // Send telemetry to cloud for logger status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var loggerData = new
+                        {
+                            log_directory = LogDirectory,
+                            log_path = LogPath,
+                            behavior_log_path = BehaviorLogPath,
+                            system_log_path = SystemLogPath,
+                            is_real_time_export_enabled = isRealTimeExportEnabled,
+                            is_behavior_tracking_enabled = isBehaviorTrackingEnabled,
+                            log_buffer_size = logBuffer.Count,
+                            max_log_buffer_size = MaxLogBufferSize,
+                            export_interval_seconds = ExportInterval.TotalSeconds,
+                            enable_compressed_logging = EnableCompressedLogging,
+                            compressed_log_path = CompressedLogPath,
+                            threat_type = "enhanced_logger_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("EnhancedLogger", "enhanced_logger_status", loggerData, ThreatLevel.Normal);
+                        
+                        // Get cloud logger analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("EnhancedLogger", loggerData);
+                        if (analysis.Success)
+                        {
+                            LogInfo($"Cloud logger analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogWarning($"Cloud logger analysis failed: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {

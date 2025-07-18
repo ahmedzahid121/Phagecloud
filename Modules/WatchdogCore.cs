@@ -102,6 +102,36 @@ namespace PhageVirus.Modules
                     
                     isActive = true;
                     EnhancedLogger.LogSuccess("Watchdog core activated");
+                    
+                    // Send telemetry to cloud for watchdog status
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var watchdogData = new
+                            {
+                                module_statuses_count = ModuleStatuses.Count,
+                                active_modules = ModuleStatuses.Count(ms => ms.Value.IsRunning),
+                                restart_counts = RestartCounts.Values.Sum(),
+                                main_process_mutex_active = mainProcessMutex != IntPtr.Zero,
+                                threat_type = "watchdog_status",
+                                timestamp = DateTime.UtcNow
+                            };
+
+                            await CloudIntegration.SendTelemetryAsync("WatchdogCore", "watchdog_status", watchdogData, ThreatLevel.Normal);
+                            
+                            // Get cloud watchdog analysis
+                            var analysis = await CloudIntegration.GetCloudAnalysisAsync("WatchdogCore", watchdogData);
+                            if (analysis.Success)
+                            {
+                                EnhancedLogger.LogInfo($"Cloud watchdog analysis: {analysis.Analysis}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EnhancedLogger.LogWarning($"Cloud watchdog analysis failed: {ex.Message}");
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {

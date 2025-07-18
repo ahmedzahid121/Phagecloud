@@ -88,6 +88,37 @@ namespace PhageVirus.Modules
                 MonitorAppInitDlls();
                 
                 EnhancedLogger.LogInfo("Zero Trust Runtime protection started", Console.WriteLine);
+                
+                // Send telemetry to cloud for zero trust status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var zeroTrustData = new
+                        {
+                            process_signatures_count = ProcessSignatures.Count,
+                            known_signatures_count = KnownSignatures.Count,
+                            call_wnd_proc_hook_active = callWndProcHook != IntPtr.Zero,
+                            get_message_hook_active = getMessageHook != IntPtr.Zero,
+                            threat_type = "zero_trust_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("ZeroTrustRuntime", "zero_trust_status", zeroTrustData, ThreatLevel.Normal);
+                        
+                        // Get cloud zero trust analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("ZeroTrustRuntime", zeroTrustData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud zero trust analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud zero trust analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

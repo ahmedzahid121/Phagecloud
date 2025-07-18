@@ -23,6 +23,35 @@ namespace PhageVirus.Modules
         {
             var found = new List<ThreatInfo>();
             
+            // Send telemetry to cloud for virus hunting
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var virusHuntingData = new
+                    {
+                        scan_paths_count = paths.Length,
+                        threat_keywords_count = ThreatKeywords.Length,
+                        suspicious_extensions_count = SuspiciousExtensions.Length,
+                        threat_type = "virus_hunting",
+                        timestamp = DateTime.UtcNow
+                    };
+
+                    await CloudIntegration.SendTelemetryAsync("VirusHunter", "virus_hunting", virusHuntingData, ThreatLevel.Normal);
+                    
+                    // Get cloud virus hunting analysis
+                    var analysis = await CloudIntegration.GetCloudAnalysisAsync("VirusHunter", virusHuntingData);
+                    if (analysis.Success)
+                    {
+                        EnhancedLogger.LogInfo($"Cloud virus hunting analysis: {analysis.Analysis}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnhancedLogger.LogWarning($"Cloud virus hunting analysis failed: {ex.Message}");
+                }
+            });
+            
             // First, hunt for suspicious processes using system-level APIs
             EnhancedLogger.LogInfo("Starting system-level process hunting...");
             var suspiciousProcesses = SystemHacker.HuntSuspiciousProcesses();

@@ -279,6 +279,36 @@ namespace PhageVirus.Modules
                 {
                     blockedIPs.Add(ipAddress);
                     EnhancedLogger.LogThreat($"Blocked malicious IP: {ipAddress} - {reason}");
+                    
+                    // Send telemetry to cloud for threat intelligence
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var firewallData = new
+                            {
+                                ip_address = ipAddress,
+                                reason = reason,
+                                action = "block",
+                                timestamp = DateTime.UtcNow,
+                                blocked_ips_count = blockedIPs.Count,
+                                blocked_domains_count = blockedDomains.Count
+                            };
+
+                            await CloudIntegration.SendTelemetryAsync("FirewallGuard", "ip_blocked", firewallData, ThreatLevel.High);
+                            
+                            // Get cloud threat intelligence
+                            var threatIntel = await CloudIntegration.GetThreatIntelligenceAsync(ipAddress, "malicious_ip");
+                            if (threatIntel.Success)
+                            {
+                                EnhancedLogger.LogInfo($"Cloud threat intel for {ipAddress}: {threatIntel.ThreatName} - Confidence: {threatIntel.Confidence:P1}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EnhancedLogger.LogWarning($"Cloud firewall analysis failed for {ipAddress}: {ex.Message}");
+                        }
+                    });
                 }
 
                 return success;

@@ -57,6 +57,41 @@ namespace PhageVirus.Modules
                 
                 EnhancedLogger.LogSuccess($"Diagnostic test completed. Report saved to: {DiagnosticReportPath}");
                 
+                // Send telemetry to cloud for diagnostic analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var diagnosticData = new
+                        {
+                            machine_name = Environment.MachineName,
+                            user_name = Environment.UserName,
+                            os_version = Environment.OSVersion.ToString(),
+                            processor_count = Environment.ProcessorCount,
+                            working_set_mb = Environment.WorkingSet / 1024 / 1024,
+                            is_64bit_process = Environment.Is64BitProcess,
+                            is_64bit_os = Environment.Is64BitOperatingSystem,
+                            elevated_privileges = IsElevated(),
+                            report_path = DiagnosticReportPath,
+                            threat_type = "system_diagnostic",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("DiagnosticTest", "system_diagnostic", diagnosticData, ThreatLevel.Normal);
+                        
+                        // Get cloud diagnostic analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("DiagnosticTest", diagnosticData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud diagnostic analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud diagnostic analysis failed: {ex.Message}");
+                    }
+                });
+                
                 // Send to email if requested
                 if (sendToEmail && !string.IsNullOrEmpty(emailAddress))
                 {

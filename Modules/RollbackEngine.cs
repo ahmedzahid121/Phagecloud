@@ -31,6 +31,37 @@ namespace PhageVirus.Modules
             {
                 isRunning = true;
                 EnhancedLogger.LogInfo("Rollback Engine started", Console.WriteLine);
+                
+                // Send telemetry to cloud for rollback engine status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var rollbackData = new
+                        {
+                            backup_dir = BackupDir,
+                            key_paths_count = KeyPaths.Count,
+                            key_registry_paths_count = KeyRegistryPaths.Count,
+                            last_backup_path = lastBackupPath,
+                            threat_type = "rollback_engine_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("RollbackEngine", "rollback_engine_status", rollbackData, ThreatLevel.Normal);
+                        
+                        // Get cloud rollback engine analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("RollbackEngine", rollbackData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud rollback engine analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud rollback engine analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return true;
             }
             catch (Exception ex)

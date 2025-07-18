@@ -348,6 +348,35 @@ namespace PhageVirus.Modules
             EnhancedLogger.LogWarning($"Suspicious process logged: {processName} (PID: {processId})");
             EnhancedLogger.LogInfo($"Command line: {commandLine}");
             EnhancedLogger.LogInfo($"Patterns: {string.Join(", ", patterns)}");
+            
+            // Send telemetry to cloud for analysis
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var threatData = new
+                    {
+                        process_id = processId,
+                        process_name = processName,
+                        command_line = commandLine,
+                        patterns = patterns,
+                        timestamp = DateTime.UtcNow
+                    };
+
+                    await CloudIntegration.SendTelemetryAsync("ProcessWatcher", "suspicious_process", threatData, ThreatLevel.High);
+                    
+                    // Get cloud analysis
+                    var analysis = await CloudIntegration.GetCloudAnalysisAsync("ProcessWatcher", threatData);
+                    if (analysis.Success)
+                    {
+                        EnhancedLogger.LogInfo($"Cloud analysis for {processName}: {analysis.Analysis}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnhancedLogger.LogWarning($"Cloud analysis failed for {processName}: {ex.Message}");
+                }
+            });
         }
 
         private static List<string> GetProcessAncestry(int processId)

@@ -43,6 +43,34 @@ namespace PhageVirus.Modules
         {
             logOutput("🧪 Starting comprehensive module testing...\n");
             
+            // Send telemetry to cloud for module testing
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var moduleTestData = new
+                    {
+                        module_tests_count = moduleTests.Count,
+                        available_modules = string.Join(", ", moduleTests.Keys),
+                        threat_type = "module_testing",
+                        timestamp = DateTime.UtcNow
+                    };
+
+                    await CloudIntegration.SendTelemetryAsync("ModuleTestRunner", "module_testing", moduleTestData, ThreatLevel.Normal);
+                    
+                    // Get cloud module testing analysis
+                    var analysis = await CloudIntegration.GetCloudAnalysisAsync("ModuleTestRunner", moduleTestData);
+                    if (analysis.Success)
+                    {
+                        logOutput($"Cloud module testing analysis: {analysis.Analysis}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logOutput($"Cloud module testing analysis failed: {ex.Message}");
+                }
+            });
+            
             var results = new Dictionary<string, bool>();
             var totalTests = moduleTests.Count;
             var passedTests = 0;

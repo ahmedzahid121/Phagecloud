@@ -50,6 +50,36 @@ namespace PhageVirus.Modules
                 MonitorScheduledTasks();
                 
                 EnhancedLogger.LogSuccess("Autorun monitoring activated");
+                
+                // Send telemetry to cloud for autorun blocker status
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var autorunData = new
+                        {
+                            suspicious_keywords_count = SuspiciousKeywords.Length,
+                            suspicious_extensions_count = SuspiciousExtensions.Length,
+                            startup_locations_count = StartupLocations.Length,
+                            startup_folders_count = StartupFolders.Length,
+                            threat_type = "autorun_blocker_status",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("AutorunBlocker", "autorun_blocker_status", autorunData, ThreatLevel.Normal);
+                        
+                        // Get cloud autorun blocker analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("AutorunBlocker", autorunData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud autorun blocker analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud autorun blocker analysis failed: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {

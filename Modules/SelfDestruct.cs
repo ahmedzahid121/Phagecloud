@@ -13,6 +13,36 @@ namespace PhageVirus.Modules
             {
                 EnhancedLogger.LogSelfDestruct("Manual self-destruct initiated", true);
                 
+                // Send telemetry to cloud for self-destruct event
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var selfDestructData = new
+                        {
+                            exe_path = System.Reflection.Assembly.GetExecutingAssembly().Location,
+                            temp_dir = Path.GetTempPath(),
+                            log_dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PhageVirus"),
+                            quarantine_dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PhageVirus", "Quarantine"),
+                            threat_type = "self_destruct",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("SelfDestruct", "self_destruct", selfDestructData, ThreatLevel.Critical);
+                        
+                        // Get cloud self-destruct analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("SelfDestruct", selfDestructData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud self-destruct analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud self-destruct analysis failed: {ex.Message}");
+                    }
+                });
+                
                 // Get the current executable path
                 string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 

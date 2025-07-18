@@ -46,6 +46,40 @@ namespace PhageVirus.Modules
 
                 EnhancedLogger.LogEmailSent(adminEmail, $"PhageVIRUS EDR Report – {Environment.MachineName} – {DateTime.Now:yyyy-MM-dd}", success);
                 lastReportTime = DateTime.Now;
+                
+                // Send telemetry to cloud for email reporting analysis
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var emailData = new
+                        {
+                            admin_email = adminEmail,
+                            smtp_host = smtpHost,
+                            success = success,
+                            report_length = reportContent.Length,
+                            threat_statistics_count = threatStatistics.Count,
+                            threat_events_count = threatEvents.Count,
+                            last_report_time = lastReportTime,
+                            threat_type = "email_report",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("EmailReporter", "email_report", emailData, ThreatLevel.Normal);
+                        
+                        // Get cloud email analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("EmailReporter", emailData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud email analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud email analysis failed: {ex.Message}");
+                    }
+                });
+                
                 return success;
             }
             catch (Exception ex)

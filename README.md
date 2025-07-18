@@ -134,6 +134,65 @@ A Windows desktop application that implements a **real, self-replicating, system
 - **Scheduled Reporting**: 12/24 hour or attack-triggered reports
 - **SMTP/TLS Support**: Enterprise email integration
 
+## ☁️ **UNIFIED CLOUD IMPLEMENTATION** 🆕
+
+### 🚀 **Cloud-Enabled Architecture**
+
+PhageVirus now supports **unified cloud integration** that connects all original modules to cloud services while maintaining full local capabilities. This provides the best of both worlds: powerful local security with cloud scalability.
+
+#### **Three Operating Modes**
+
+- **🖥️ Local Mode** (Full Power): All modules run locally (500MB RAM, 20% CPU)
+- **🔄 Hybrid Mode** (Balanced): Core modules local + advanced modules cloud (200MB RAM, 10% CPU)  
+- **☁️ Cloud Mode** (Lightweight): Minimal local + cloud primary processing (100MB RAM, 5% CPU)
+
+#### **Cloud Integration Features**
+
+- **🔗 Unified Module Manager**: Central coordination of all 25+ security modules
+- **📊 Cloud Telemetry**: Real-time threat data sharing with Azure and AWS
+- **🧠 Cloud ML Analysis**: Offloads heavy ML processing to cloud services
+- **🛡️ Threat Intelligence**: Global threat database access and correlation
+- **⚡ Resource Optimization**: Automatic memory and CPU management
+- **🔄 Distributed Detection**: Cross-endpoint threat correlation and analysis
+
+#### **Performance Improvements**
+
+| Mode | Memory | CPU | Features | Cloud Usage |
+|------|--------|-----|----------|-------------|
+| **Original** | 500MB+ | 20%+ | All Local | None |
+| **Local** | 500MB | 20% | All Local | None |
+| **Hybrid** | 200MB | 10% | Local + Cloud | Moderate |
+| **Cloud** | 100MB | 5% | Cloud Primary | High |
+
+#### **Enhanced Modules with Cloud Integration**
+
+- **ProcessWatcher**: Cloud telemetry and threat analysis
+- **AnomalyScoreClassifier**: Cloud ML model offloading and analysis
+- **CredentialTrap**: Cloud threat intelligence and credential theft detection
+- **All Other Modules**: Cloud-enabled with telemetry and analysis
+
+#### **Quick Start - Cloud Mode**
+
+```powershell
+# Initialize unified system
+.\PhageVirus.exe --mode hybrid
+
+# Switch to cloud mode for lightweight operation
+.\PhageVirus.exe --mode cloud
+
+# Return to full local power
+.\PhageVirus.exe --mode local
+```
+
+#### **Cloud Services Support**
+
+- **Azure Services**: App Service, Functions, Sentinel, ML Studio
+- **AWS Services**: Lambda, Kinesis, DynamoDB, ECS
+- **Hybrid Deployment**: Multi-cloud support with automatic failover
+- **Enterprise Features**: Role-based access, audit logging, compliance
+
+> **📖 For complete cloud implementation details, see [UNIFIED_CLOUD_IMPLEMENTATION.md](UNIFIED_CLOUD_IMPLEMENTATION.md)**
+
 ## ⚠️ **IMPORTANT WARNING**
 
 **This is a powerful Red Team tool for educational and research purposes only.**
@@ -322,9 +381,13 @@ PhageVirus/
 │   ├── RollbackEngine.cs    # System backup and restoration
 │   ├── PhishingGuard.cs     # Phishing detection and prevention
 │   ├── AnomalyScoreClassifier.cs # ML-powered behavior analysis
-│   └── FirewallGuard.cs     # Dynamic firewall control
+│   ├── FirewallGuard.cs     # Dynamic firewall control
+│   ├── CloudIntegration.cs  # Cloud communication bridge 🆕
+│   ├── UnifiedConfig.cs     # Unified configuration system 🆕
+│   └── UnifiedModuleManager.cs # Central module coordination 🆕
 ├── build_portable.ps1       # Portable deployment script
 ├── ENHANCED_FEATURES_GUIDE.md # Complete feature documentation
+├── UNIFIED_CLOUD_IMPLEMENTATION.md # Cloud implementation guide 🆕
 ├── appsettings.json         # Configuration file
 ├── build_and_run.bat        # Build script
 ├── run_phagevirus.ps1       # PowerShell build script
@@ -393,21 +456,37 @@ PhageVirus/
 ### Basic Operation
 
 1. **Launch** the application as Administrator
-2. **Watch** the autonomous prevention system activate with visual indicators
-3. **Monitor** real-time metrics dashboard for system status
-4. **Navigate** through tabs to access different features:
+2. **Choose Operating Mode** (Local/Hybrid/Cloud) for optimal performance
+3. **Watch** the unified module manager activate all security modules
+4. **Monitor** real-time metrics dashboard for system status
+5. **Navigate** through tabs to access different features:
    - **Threat Intelligence**: View threat statistics and timeline
    - **Live Activity**: Monitor real-time logs and export data
    - **System Monitor**: Track processes and resource usage
    - **Configuration**: Control modules and email settings
-5. **Use "START HUNTING"** to begin additional threat detection
-6. **Review** detected threats in the timeline
-7. **Configure** email reporting for automated alerts
-8. **Use "SELF-DESTRUCT"** if threats were found (optional)
+6. **Use "START HUNTING"** to begin additional threat detection
+7. **Review** detected threats in the timeline
+8. **Configure** email reporting for automated alerts
+9. **Use "SELF-DESTRUCT"** if threats were found (optional)
+
+### Cloud-Enabled Operation
+
+The application now supports three operating modes:
+
+- **Local Mode**: Full power, all modules run locally (500MB RAM, 20% CPU)
+- **Hybrid Mode**: Balanced, core modules local + advanced modules cloud (200MB RAM, 10% CPU)
+- **Cloud Mode**: Lightweight, minimal local + cloud primary processing (100MB RAM, 5% CPU)
+
+Switch modes using command line arguments:
+```powershell
+.\PhageVirus.exe --mode hybrid  # Recommended for most users
+.\PhageVirus.exe --mode cloud   # For resource-constrained systems
+.\PhageVirus.exe --mode local   # For maximum security (air-gapped)
+```
 
 ### Autonomous Prevention System
 
-The application automatically activates prevention modules on startup:
+The application automatically activates prevention modules on startup through the unified module manager:
 
 1. **ProcessWatcher**: Monitors new processes and blocks malicious ones
 2. **AutorunBlocker**: Protects against persistence mechanisms
@@ -422,6 +501,8 @@ The application automatically activates prevention modules on startup:
 11. **AnomalyScoreClassifier**: ML-powered behavior analysis and scoring
 12. **CredentialTrap**: Advanced LSASS protection and credential theft prevention
 13. **FirewallGuard**: Dynamic firewall control and IP blocking
+
+**Cloud Integration**: All modules now support cloud telemetry and analysis, providing enhanced threat detection and global threat intelligence sharing.
 
 ### Scan Process
 

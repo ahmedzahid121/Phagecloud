@@ -83,6 +83,34 @@ namespace PhageVirus.Modules
             {
                 var processes = Process.GetProcesses();
                 EnhancedLogger.LogInfo($"Scanning {processes.Length} running processes for threats...");
+                
+                // Send telemetry to cloud for process hunting
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var processHuntingData = new
+                        {
+                            total_processes = processes.Length,
+                            malicious_patterns_count = MaliciousPatterns.Length,
+                            threat_type = "process_hunting",
+                            timestamp = DateTime.UtcNow
+                        };
+
+                        await CloudIntegration.SendTelemetryAsync("SystemHacker", "process_hunting", processHuntingData, ThreatLevel.Normal);
+                        
+                        // Get cloud process hunting analysis
+                        var analysis = await CloudIntegration.GetCloudAnalysisAsync("SystemHacker", processHuntingData);
+                        if (analysis.Success)
+                        {
+                            EnhancedLogger.LogInfo($"Cloud process hunting analysis: {analysis.Analysis}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnhancedLogger.LogWarning($"Cloud process hunting analysis failed: {ex.Message}");
+                    }
+                });
 
                 foreach (var process in processes)
                 {
