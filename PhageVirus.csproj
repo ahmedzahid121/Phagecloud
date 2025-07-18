@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyTitle>PhageVirus - Advanced Threat Neutralization System</AssemblyTitle>
+    <AssemblyDescription>Biological-style virus hunter with enterprise-grade EDR capabilities</AssemblyDescription>
+    <AssemblyCompany>PhageVirus Security</AssemblyCompany>
+    <AssemblyProduct>PhageVirus</AssemblyProduct>
+    <AssemblyCopyright>Copyright © 2024</AssemblyCopyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+  </ItemGroup>
+</Project> 

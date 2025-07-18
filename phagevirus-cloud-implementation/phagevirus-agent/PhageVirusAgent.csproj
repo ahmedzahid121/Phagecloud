@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>false</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyTitle>PhageVirus Cloud Agent</AssemblyTitle>
+    <AssemblyDescription>Lightweight endpoint agent for hybrid cloud security</AssemblyDescription>
+    <AssemblyCompany>PhageVirus Security</AssemblyCompany>
+    <AssemblyProduct>PhageVirus Agent</AssemblyProduct>
+    <AssemblyCopyright>Copyright © 2024</AssemblyCopyright>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Core Dependencies -->
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+    
+    <!-- Cloud Communication -->
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.20.0" />
+    <PackageReference Include="AWSSDK.Kinesis" Version="3.7.300.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.300.0" />
+    
+    <!-- HTTP Communication -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    
+    <!-- JSON & Serialization -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+    
+    <!-- Performance & Monitoring -->
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="config\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project> 

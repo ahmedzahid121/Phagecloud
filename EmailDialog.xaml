@@ -1,0 +1,93 @@
+<Window x:Class="PhageVirus.EmailDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Diagnostic Test - Email Options"
+        Width="400"
+        Height="300"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#1a1a1a">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <TextBlock Grid.Row="0" 
+                   Text="🔍 Diagnostic Test Email Options" 
+                   FontSize="16" 
+                   FontWeight="Bold" 
+                   Foreground="#00ffff" 
+                   Margin="0,0,0,20"
+                   HorizontalAlignment="Center"/>
+        
+        <!-- Description -->
+        <TextBlock Grid.Row="1" 
+                   Text="The diagnostic test will generate a comprehensive report of your system health, PhageVirus status, and any issues found." 
+                   Foreground="#cccccc" 
+                   TextWrapping="Wrap" 
+                   Margin="0,0,0,20"/>
+        
+        <!-- Send to Email Checkbox -->
+        <CheckBox Grid.Row="2" 
+                  x:Name="SendToEmailCheckBox" 
+                  Content="Send diagnostic report to email" 
+                  Foreground="#cccccc" 
+                  Margin="0,0,0,10"
+                  Checked="SendToEmailCheckBox_Checked"
+                  Unchecked="SendToEmailCheckBox_Unchecked"/>
+        
+        <!-- Email Address -->
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    Margin="0,0,0,10">
+            <TextBlock Text="Email Address:" 
+                       Foreground="#cccccc" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,0"/>
+            <TextBox x:Name="EmailTextBox" 
+                     Width="250" 
+                     Background="#333333" 
+                     Foreground="#cccccc" 
+                     BorderBrush="#555555"
+                     IsEnabled="False"/>
+        </StackPanel>
+        
+        <!-- Note -->
+        <TextBlock Grid.Row="4" 
+                   Text="Note: The report will always be saved to your desktop regardless of email option." 
+                   Foreground="#888888" 
+                   FontSize="11" 
+                   TextWrapping="Wrap" 
+                   Margin="0,0,0,20"/>
+        
+        <!-- Spacer -->
+        <Grid Grid.Row="5"/>
+        
+        <!-- Buttons -->
+        <StackPanel Grid.Row="6" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button x:Name="CancelButton" 
+                    Content="Cancel" 
+                    Background="#666666" 
+                    Foreground="#ffffff" 
+                    Padding="20,8" 
+                    Margin="0,0,10,0" 
+                    Click="CancelButton_Click"/>
+            <Button x:Name="RunButton" 
+                    Content="Run Diagnostic Test" 
+                    Background="#00cc66" 
+                    Foreground="#ffffff" 
+                    Padding="20,8" 
+                    Click="RunButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window> 

@@ -1,0 +1,59 @@
+{
+  "mode": "hybrid",
+  "cloud": {
+    "azure": {
+      "endpoint": "https://phagevirus-azure.azurewebsites.net",
+      "auth": "managed-identity",
+      "telemetry": {
+        "interval": 120,
+        "batch_size": 50,
+        "retry_attempts": 3,
+        "timeout": 30
+      },
+      "functions": {
+        "threat_analysis": "https://phagevirus-azure.azurewebsites.net/api/ThreatAnalysis",
+        "log_forwarder": "https://phagevirus-azure.azurewebsites.net/api/LogForwarder",
+        "ml_scoring": "https://phagevirus-azure.azurewebsites.net/api/MLScoring"
+      }
+    },
+    "aws": {
+      "region": "us-east-1",
+      "kinesis_stream": "phagevirus-telemetry",
+      "dynamodb_table": "phagevirus-endpoints",
+      "s3_bucket": "phagevirus-logs",
+      "api_gateway": "https://api.phagevirus-aws.com"
+    }
+  },
+  "local": {
+    "modules": {
+      "ProcessWatcher": true,
+      "MemoryTrap": true,
+      "CredentialTrap": true,
+      "ExploitShield": true,
+      "FirewallGuard": true
+    },
+    "scan_interval": 60,
+    "max_memory_usage": 100,
+    "max_cpu_usage": 5
+  },
+  "telemetry": {
+    "enabled": true,
+    "heartbeat_interval": 60,
+    "log_upload_interval": 180,
+    "compression": true,
+    "encryption": true,
+    "priority_threshold": 0.7
+  },
+  "security": {
+    "certificate_validation": true,
+    "tls_version": "1.2",
+    "proxy_settings": null,
+    "local_encryption": true
+  },
+  "offload": {
+    "ml_processing": true,
+    "heavy_analysis": true,
+    "log_storage": true,
+    "threat_intelligence": true
+  }
+} 

@@ -1,0 +1,48 @@
+{
+  "mode": "cloud",
+  "cloud": {
+    "azure": {
+      "endpoint": "https://phagevirus-azure.azurewebsites.net",
+      "auth": "managed-identity",
+      "telemetry": {
+        "interval": 300,
+        "batch_size": 100,
+        "retry_attempts": 3,
+        "timeout": 30
+      },
+      "functions": {
+        "threat_analysis": "https://phagevirus-azure.azurewebsites.net/api/ThreatAnalysis",
+        "log_forwarder": "https://phagevirus-azure.azurewebsites.net/api/LogForwarder"
+      }
+    },
+    "aws": {
+      "region": "us-east-1",
+      "kinesis_stream": "phagevirus-telemetry",
+      "dynamodb_table": "phagevirus-endpoints",
+      "s3_bucket": "phagevirus-logs",
+      "api_gateway": "https://api.phagevirus-aws.com"
+    }
+  },
+  "local": {
+    "modules": {
+      "ProcessWatcher": false,
+      "MemoryTrap": false,
+      "CredentialTrap": false,
+      "ExploitShield": false
+    },
+    "scan_interval": 0,
+    "max_memory_usage": 50
+  },
+  "telemetry": {
+    "enabled": true,
+    "heartbeat_interval": 60,
+    "log_upload_interval": 300,
+    "compression": true,
+    "encryption": true
+  },
+  "security": {
+    "certificate_validation": true,
+    "tls_version": "1.2",
+    "proxy_settings": null
+  }
+} 
