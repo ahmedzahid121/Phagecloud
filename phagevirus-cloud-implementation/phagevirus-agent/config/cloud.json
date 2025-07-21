@@ -1,0 +1,53 @@
+{
+  "mode": "cloud",
+  "cloud": {
+    "aws": {
+      "region": "ap-southeast-2",
+      "s3_bucket": "phagevirus-logs",
+      "dynamodb_table": "phagevirus-endpoints",
+      "lambda_function": "phagevirus-telemetry-processor",
+      "cloudwatch_log_group": "/aws/phagevirus/agent",
+      "kinesis_stream": "phagevirus-telemetry",
+      "api_gateway": "",
+      "telemetry": {
+        "interval": 300,
+        "batch_size": 50,
+        "retry_attempts": 3,
+        "timeout": 30
+      }
+    },
+    "azure": {
+      "key_vault": {
+        "enabled": true,
+        "vault_url": "https://phagevirus-secrets.vault.azure.net/",
+        "secrets": {
+          "smtp_username": "smtp-username",
+          "smtp_password": "smtp-password",
+          "api_tokens": "api-tokens"
+        }
+      }
+    }
+  },
+  "local": {
+    "modules": {
+      "ProcessWatcher": false,
+      "MemoryTrap": false,
+      "CredentialTrap": false,
+      "ExploitShield": false
+    },
+    "scan_interval": 0,
+    "max_memory_usage": 50
+  },
+  "telemetry": {
+    "enabled": true,
+    "heartbeat_interval": 60,
+    "log_upload_interval": 300,
+    "compression": true,
+    "encryption": true
+  },
+  "security": {
+    "certificate_validation": true,
+    "tls_version": "1.2",
+    "proxy_settings": null
+  }
+} 

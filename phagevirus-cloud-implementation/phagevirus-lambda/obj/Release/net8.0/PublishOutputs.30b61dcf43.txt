@@ -1,0 +1,15 @@
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\aws-lambda-tools-defaults.json
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\PhageVirusLambda.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\PhageVirusLambda.deps.json
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\PhageVirusLambda.runtimeconfig.json
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\PhageVirusLambda.pdb
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\Amazon.Lambda.APIGatewayEvents.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\Amazon.Lambda.Core.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\Amazon.Lambda.KinesisEvents.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\Amazon.Lambda.SQSEvents.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\AWSSDK.CloudWatchLogs.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\AWSSDK.Core.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\AWSSDK.DynamoDBv2.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\AWSSDK.Kinesis.dll
+C:\Users\bad Anaya\Desktop\CloudPhage\Phagecloud\phagevirus-cloud-implementation\phagevirus-lambda\publish\AWSSDK.S3.dll

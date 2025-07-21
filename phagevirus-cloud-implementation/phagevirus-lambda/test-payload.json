@@ -1,0 +1,38 @@
+{
+  "agentId": "test-endpoint-001",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "dataType": "Process",
+  "data": {
+    "processCount": 150,
+    "suspiciousProcesses": 2,
+    "highCpuProcesses": 5,
+    "highMemoryProcesses": 3,
+    "processes": [
+      {
+        "name": "svchost.exe",
+        "pid": 1234,
+        "cpuUsage": 2.5,
+        "memoryUsage": 52428800,
+        "isSuspicious": false
+      },
+      {
+        "name": "powershell.exe",
+        "pid": 5678,
+        "cpuUsage": 15.2,
+        "memoryUsage": 104857600,
+        "isSuspicious": true,
+        "commandLine": "powershell -enc JABw..."
+      },
+      {
+        "name": "explorer.exe",
+        "pid": 9012,
+        "cpuUsage": 1.8,
+        "memoryUsage": 78643200,
+        "isSuspicious": false
+      }
+    ]
+  },
+  "isCompressed": false,
+  "isEncrypted": false,
+  "checksum": "a1b2c3d4e5f6789012345678901234567890abcd"
+} 

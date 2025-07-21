@@ -1,0 +1,108 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\PhageVirusLambda.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\PhageVirusLambda.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\PhageVirusLambda.csproj",
+        "projectName": "PhageVirusLambda",
+        "projectPath": "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\PhageVirusLambda.csproj",
+        "packagesPath": "C:\\Users\\bad Anaya\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\bad Anaya\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AWSSDK.CloudWatchLogs": {
+              "target": "Package",
+              "version": "[3.7.300, )"
+            },
+            "AWSSDK.Core": {
+              "target": "Package",
+              "version": "[3.7.300, )"
+            },
+            "AWSSDK.DynamoDBv2": {
+              "target": "Package",
+              "version": "[3.7.300, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.300, )"
+            },
+            "Amazon.Lambda.APIGatewayEvents": {
+              "target": "Package",
+              "version": "[2.7.0, )"
+            },
+            "Amazon.Lambda.Core": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Amazon.Lambda.KinesisEvents": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Amazon.Lambda.SQSEvents": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Amazon.Lambda.Serialization.SystemTextJson": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.412/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

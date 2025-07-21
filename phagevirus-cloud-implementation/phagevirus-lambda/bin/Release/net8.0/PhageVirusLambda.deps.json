@@ -1,0 +1,223 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "PhageVirusLambda/1.0.0": {
+        "dependencies": {
+          "AWSSDK.CloudWatchLogs": "3.7.300",
+          "AWSSDK.Core": "3.7.300",
+          "AWSSDK.DynamoDBv2": "3.7.300",
+          "AWSSDK.S3": "3.7.300",
+          "Amazon.Lambda.APIGatewayEvents": "2.7.0",
+          "Amazon.Lambda.Core": "2.2.0",
+          "Amazon.Lambda.KinesisEvents": "2.1.0",
+          "Amazon.Lambda.SQSEvents": "2.1.0",
+          "Amazon.Lambda.Serialization.SystemTextJson": "2.4.1",
+          "System.Text.Json": "8.0.2"
+        },
+        "runtime": {
+          "PhageVirusLambda.dll": {}
+        }
+      },
+      "Amazon.Lambda.APIGatewayEvents/2.7.0": {
+        "runtime": {
+          "lib/net8.0/Amazon.Lambda.APIGatewayEvents.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "Amazon.Lambda.Core/2.2.0": {
+        "runtime": {
+          "lib/net8.0/Amazon.Lambda.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Amazon.Lambda.KinesisEvents/2.1.0": {
+        "dependencies": {
+          "AWSSDK.Kinesis": "3.7.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Amazon.Lambda.KinesisEvents.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Amazon.Lambda.Serialization.SystemTextJson/2.4.1": {
+        "dependencies": {
+          "Amazon.Lambda.Core": "2.2.0"
+        },
+        "runtime": {
+          "lib/net8.0/Amazon.Lambda.Serialization.SystemTextJson.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Amazon.Lambda.SQSEvents/2.1.0": {
+        "runtime": {
+          "lib/netcoreapp3.1/Amazon.Lambda.SQSEvents.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AWSSDK.CloudWatchLogs/3.7.300": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.300"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CloudWatchLogs.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.0"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.300": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.0"
+          }
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.7.300": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.300"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.0"
+          }
+        }
+      },
+      "AWSSDK.Kinesis/3.7.0": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.300"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Kinesis.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.0.0"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.300": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.300"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.0"
+          }
+        }
+      },
+      "System.Text.Encodings.Web/8.0.0": {},
+      "System.Text.Json/8.0.2": {
+        "dependencies": {
+          "System.Text.Encodings.Web": "8.0.0"
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PhageVirusLambda/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Amazon.Lambda.APIGatewayEvents/2.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HAbdRKLzvUqRg/fItan7up/PWsj6vQfYF+1a4YV6sv1bq5TuK/ra+ndJwWMlzL+MFJzJaHwCmtkyBbh/vz8Oig==",
+      "path": "amazon.lambda.apigatewayevents/2.7.0",
+      "hashPath": "amazon.lambda.apigatewayevents.2.7.0.nupkg.sha512"
+    },
+    "Amazon.Lambda.Core/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DHqKeD1CYocP0t1dJC/NaXfu+5k6AoqnQ1Hlu/J2mXpLpCyeJfY+tIqT5fpruDarUlU0NtdIH8zSkCjeinyb1A==",
+      "path": "amazon.lambda.core/2.2.0",
+      "hashPath": "amazon.lambda.core.2.2.0.nupkg.sha512"
+    },
+    "Amazon.Lambda.KinesisEvents/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IPkeG6QhjlbXf1vdoxtyBF3PyPkPi4mAVXr2bqDuA0UuUrqr92ZIrqNn983HA0m71X6SIHXamxjoZzxyKV5fLw==",
+      "path": "amazon.lambda.kinesisevents/2.1.0",
+      "hashPath": "amazon.lambda.kinesisevents.2.1.0.nupkg.sha512"
+    },
+    "Amazon.Lambda.Serialization.SystemTextJson/2.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-X06Z8zPDZJS/xAoAntSqsxOoSSKKFJMg+0QGPRtlPt1mbP19HFXlXn+q+XqHdVWWFsiH/r7KbDIICr0nsrlwug==",
+      "path": "amazon.lambda.serialization.systemtextjson/2.4.1",
+      "hashPath": "amazon.lambda.serialization.systemtextjson.2.4.1.nupkg.sha512"
+    },
+    "Amazon.Lambda.SQSEvents/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-a1xaCIuXDleJ8iRE3vHWWhtPqUiURmoQUS68INMEQmtfHr4wTz837TQZONo4cyubv5sZj78DDrYessZEzgFRGQ==",
+      "path": "amazon.lambda.sqsevents/2.1.0",
+      "hashPath": "amazon.lambda.sqsevents.2.1.0.nupkg.sha512"
+    },
+    "AWSSDK.CloudWatchLogs/3.7.300": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PQIJpklX0KLnMde+NZ8QqRbElHpiy56ikIqZCDAjNG1aenWahoVEeW6nscT0avKfkMkIoNW46PXGrzqrTeEwgw==",
+      "path": "awssdk.cloudwatchlogs/3.7.300",
+      "hashPath": "awssdk.cloudwatchlogs.3.7.300.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.300": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Sf6Y3Ip44LUnTsFK2lz5heMThQQ4eYqN2u1xF/jA5K6uiXUeIHV4ISGb/reQ4MEOejiD15e+dtYy3Zebn4yXLw==",
+      "path": "awssdk.core/3.7.300",
+      "hashPath": "awssdk.core.3.7.300.nupkg.sha512"
+    },
+    "AWSSDK.DynamoDBv2/3.7.300": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CYgIFzpHSePVPl3vtoyOOSw09a424fZaraSK/QCTANeMaGGgcUVBTZ19OsxYA3N5tKe0QDfMWIQsVHj33mavvA==",
+      "path": "awssdk.dynamodbv2/3.7.300",
+      "hashPath": "awssdk.dynamodbv2.3.7.300.nupkg.sha512"
+    },
+    "AWSSDK.Kinesis/3.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1p5BbqzAC3C7UYAbh4Y+i8X0XVorIy1+5BIbqo0bM5pDO+dru/YhtJdqdlVIvqKoU1aKKvUBeOZ6L59zfNcaMQ==",
+      "path": "awssdk.kinesis/3.7.0",
+      "hashPath": "awssdk.kinesis.3.7.0.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.300": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1m8dYqyPW3Z97OxY13w2uYsNUPYsYONATInT8FebeDpwXwtNWqzxGAcZlwzdVMWRvYOwymmvoTtACjmH8qUVHA==",
+      "path": "awssdk.s3/3.7.300",
+      "hashPath": "awssdk.s3.3.7.300.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ==",
+      "path": "system.text.encodings.web/8.0.0",
+      "hashPath": "system.text.encodings.web.8.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/8.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+      "path": "system.text.json/8.0.2",
+      "hashPath": "system.text.json.8.0.2.nupkg.sha512"
+    }
+  }
+}

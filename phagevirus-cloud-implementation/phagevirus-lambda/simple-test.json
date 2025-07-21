@@ -1,0 +1,13 @@
+﻿{
+    "Data":  {
+                 "MemoryUsage":  67.8,
+                 "ActiveProcesses":  89,
+                 "CpuUsage":  45.2
+             },
+    "Checksum":  "test-checksum",
+    "Timestamp":  "2025-07-20T16:51:34Z",
+    "IsEncrypted":  false,
+    "DataType":  "system",
+    "IsCompressed":  false,
+    "AgentId":  "test-agent-001"
+}

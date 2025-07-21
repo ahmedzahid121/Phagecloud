@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "dgSpecHash": "Bouj38xDXKU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bad Anaya\\Desktop\\CloudPhage\\Phagecloud\\phagevirus-cloud-implementation\\phagevirus-lambda\\PhageVirusLambda.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\amazon.lambda.apigatewayevents\\2.7.0\\amazon.lambda.apigatewayevents.2.7.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\amazon.lambda.core\\2.2.0\\amazon.lambda.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\amazon.lambda.kinesisevents\\2.1.0\\amazon.lambda.kinesisevents.2.1.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.1\\amazon.lambda.serialization.systemtextjson.2.4.1.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\amazon.lambda.sqsevents\\2.1.0\\amazon.lambda.sqsevents.2.1.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\awssdk.cloudwatchlogs\\3.7.300\\awssdk.cloudwatchlogs.3.7.300.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\awssdk.core\\3.7.300\\awssdk.core.3.7.300.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.300\\awssdk.dynamodbv2.3.7.300.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\awssdk.kinesis\\3.7.0\\awssdk.kinesis.3.7.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\awssdk.s3\\3.7.300\\awssdk.s3.3.7.300.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\bad Anaya\\.nuget\\packages\\system.text.json\\8.0.2\\system.text.json.8.0.2.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}
