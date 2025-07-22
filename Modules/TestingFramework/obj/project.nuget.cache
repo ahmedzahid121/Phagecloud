@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "dgSpecHash": "J7jLaIXIDGc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zahid\\OneDrive\\Desktop\\CloudPhage\\Phagecloud\\Modules\\TestingFramework\\PhageVirus.Testing.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zahid\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\zahid\\.nuget\\packages\\system.text.json\\8.0.2\\system.text.json.8.0.2.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
+      "projectPath": "C:\\Users\\zahid\\OneDrive\\Desktop\\CloudPhage\\Phagecloud\\Modules\\TestingFramework\\PhageVirus.Testing.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\zahid\\OneDrive\\Desktop\\CloudPhage\\Phagecloud\\Modules\\TestingFramework\\PhageVirus.Testing.csproj",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+      "projectPath": "C:\\Users\\zahid\\OneDrive\\Desktop\\CloudPhage\\Phagecloud\\Modules\\TestingFramework\\PhageVirus.Testing.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\zahid\\OneDrive\\Desktop\\CloudPhage\\Phagecloud\\Modules\\TestingFramework\\PhageVirus.Testing.csproj",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}

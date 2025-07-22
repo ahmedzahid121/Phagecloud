@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PhageVirus.Testing</AssemblyName>
+    <RootNamespace>PhageVirus.Testing</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>PhageVirus Team</Authors>
+    <Description>Industry Standard Testing Framework for PhageVirus EDR System</Description>
+    <Copyright>Copyright (c) 2025 PhageVirus Team</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestRunner.cs" />
+    <Compile Remove="UnitTestSuite.cs" />
+    <Compile Remove="IntegrationTestSuite.cs" />
+    <Compile Remove="FunctionalTestSuite.cs" />
+    <Compile Remove="PerformanceTestSuite.cs" />
+    <Compile Remove="SecurityTestSuite.cs" />
+    <Compile Remove="RegressionTestSuite.cs" />
+    <Compile Remove="ManualQATestSuite.cs" />
+    <Compile Remove="RunTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="run-tests.ps1" />
+    <None Include="README.md" />
+  </ItemGroup>
+
+</Project> 

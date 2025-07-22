@@ -1,0 +1,15 @@
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.AssemblyInfoInputs.cache
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.AssemblyInfo.cs
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.csproj.CoreCompileInputs.cache
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.sourcelink.json
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\bin\Release\net8.0\PhageVirus.Testing.exe
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\bin\Release\net8.0\PhageVirus.Testing.deps.json
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\bin\Release\net8.0\PhageVirus.Testing.runtimeconfig.json
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\bin\Release\net8.0\PhageVirus.Testing.dll
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\bin\Release\net8.0\PhageVirus.Testing.pdb
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.dll
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\refint\PhageVirus.Testing.dll
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.pdb
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\PhageVirus.Testing.genruntimeconfig.cache
+C:\Users\zahid\OneDrive\Desktop\CloudPhage\Phagecloud\Modules\TestingFramework\obj\Release\net8.0\ref\PhageVirus.Testing.dll
