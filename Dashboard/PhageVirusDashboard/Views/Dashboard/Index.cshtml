@@ -1,0 +1,505 @@
+@model PhageVirusDashboard.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "PhageVirus Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #1a1a1a;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-light: #ffffff;
+            --text-muted: #6c757d;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--card-bg) !important;
+            border-bottom: 1px solid #333;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            background-color: rgba(0, 212, 255, 0.1);
+            border-bottom: 1px solid #333;
+            color: var(--primary-color);
+        }
+
+        .executive-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .executive-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .status-online { color: var(--success-color); }
+        .status-offline { color: var(--danger-color); }
+        .status-unhealthy { color: var(--warning-color); }
+        .status-isolated { color: var(--danger-color); }
+
+        .severity-critical { color: var(--danger-color); }
+        .severity-high { color: #fd7e14; }
+        .severity-medium { color: var(--warning-color); }
+        .severity-low { color: var(--success-color); }
+
+        .table {
+            color: var(--text-light);
+        }
+
+        .table th {
+            border-color: #333;
+            color: var(--primary-color);
+        }
+
+        .table td {
+            border-color: #333;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #00b8e6;
+            border-color: #00b8e6;
+        }
+
+        .refresh-indicator {
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .sidebar {
+            position: fixed;
+            right: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            border-left: 1px solid #333;
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .threat-item {
+            border-left: 4px solid var(--primary-color);
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(0, 212, 255, 0.05);
+        }
+
+        .threat-item.critical {
+            border-left-color: var(--danger-color);
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .threat-item.high {
+            border-left-color: #fd7e14;
+            background-color: rgba(253, 126, 20, 0.1);
+        }
+
+        .threat-item.medium {
+            border-left-color: var(--warning-color);
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .threat-item.low {
+            border-left-color: var(--success-color);
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-shield-virus text-primary"></i>
+                <span class="ms-2">PhageVirus Dashboard</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time"></span>
+                </span>
+                <span class="navbar-text me-3">
+                    <i class="fas fa-sync-alt refresh-indicator"></i>
+                    Last updated: <span id="last-updated">@Model.LastUpdated.ToString("HH:mm:ss")</span>
+                </span>
+                <button class="btn btn-outline-primary btn-sm" onclick="toggleSidebar()">
+                    <i class="fas fa-cog"></i> Actions
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Executive Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-desktop fa-2x text-success mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Endpoints.OnlineCount/@Model.Summary.Endpoints.TotalCount</div>
+                        <div class="metric-label">Active Endpoints</div>
+                        <small class="text-muted">@Model.Summary.Endpoints.OnlinePercentage.ToString("F1")% online</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Threats.NewThreatsToday/@Model.Summary.Threats.CriticalThreats</div>
+                        <div class="metric-label">Threats Today</div>
+                        <small class="text-muted">@Model.Summary.Threats.TotalThreatsToday total</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cloud fa-2x text-warning mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Cloud.MisconfigAlerts</div>
+                        <div class="metric-label">Cloud Alerts</div>
+                        <small class="text-muted">@Model.Summary.Cloud.CriticalGaps critical</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-shield fa-2x text-info mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Identity.SuspiciousLogins/@Model.Summary.Identity.TokenMisuse</div>
+                        <div class="metric-label">Identity Threats</div>
+                        <small class="text-muted">@Model.Summary.Identity.SessionHijacks sessions</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-heartbeat fa-2x text-success mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Health.HealthPercentage.ToString("F0")%</div>
+                        <div class="metric-label">System Health</div>
+                        <small class="text-muted">@Model.Summary.Health.OutdatedAgents outdated</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card executive-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-vial fa-2x text-primary mb-2"></i>
+                        <div class="metric-value">@Model.Summary.Tests.PassRate.ToString("F0")%</div>
+                        <div class="metric-label">Test Status</div>
+                        <small class="text-muted">@Model.Summary.Tests.LastRun.ToString("HH:mm")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="row">
+            <!-- Threat Feed -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Threat Feed</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                        @foreach (var threat in Model.ThreatFeed.RecentThreats.Take(10))
+                        {
+                            <div class="threat-item @threat.Severity.ToString().ToLower()">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>@threat.Type</strong>
+                                        <br>
+                                        <small class="text-muted">@threat.AffectedAgent</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-@(threat.Severity == ThreatSeverity.Critical ? "danger" : 
+                                                           threat.Severity == ThreatSeverity.High ? "warning" : 
+                                                           threat.Severity == ThreatSeverity.Medium ? "info" : "success")">
+                                            @threat.Severity
+                                        </span>
+                                        <br>
+                                        <small class="text-muted">@threat.Timestamp.ToString("HH:mm")</small>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <small>@threat.ActionTaken</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint Overview -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-desktop"></i> Endpoint Overview</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Device</th>
+                                        <th>Status</th>
+                                        <th>Last Scan</th>
+                                        <th>Threats</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var endpoint in Model.Endpoints.Endpoints.Take(10))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@endpoint.DeviceName</strong>
+                                                <br>
+                                                <small class="text-muted">@endpoint.OperatingSystem</small>
+                                            </td>
+                                            <td>
+                                                <span class="status-@endpoint.Status.ToString().ToLower()">
+                                                    <i class="fas fa-circle"></i> @endpoint.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <small>@endpoint.LastScan.ToString("HH:mm")</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-@(endpoint.ThreatsBlocked > 0 ? "danger" : "success")">
+                                                    @endpoint.ThreatsBlocked
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cloud Posture and Identity Protection -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-cloud"></i> Cloud Posture</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <h6>AWS</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-exclamation-triangle text-warning"></i> @Model.Cloud.Aws.IamMisconfigs IAM misconfigs</li>
+                                    <li><i class="fas fa-exclamation-triangle text-danger"></i> @Model.Cloud.Aws.PublicS3Buckets public S3 buckets</li>
+                                    <li><i class="fas fa-exclamation-triangle text-warning"></i> @Model.Cloud.Aws.ExposedRoles exposed roles</li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <h6>Azure</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-exclamation-triangle text-warning"></i> @Model.Cloud.Azure.FunctionCrashes function crashes</li>
+                                    <li><i class="fas fa-exclamation-triangle text-danger"></i> @Model.Cloud.Azure.AnomalousExecutions anomalous executions</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6>CSPM Status</h6>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: @Model.Cloud.Cspm.CompliancePercentage%">
+                                    @Model.Cloud.Cspm.CompliancePercentage%
+                                </div>
+                            </div>
+                            <small class="text-muted">@Model.Cloud.Cspm.CriticalGaps critical gaps</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user-shield"></i> Identity Protection</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var alert in Model.Identity.Alerts)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong>@alert.Type</strong>
+                                    <br>
+                                    <small class="text-muted">@alert.Description</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-@(alert.Severity == ThreatSeverity.Critical ? "danger" : 
+                                                       alert.Severity == ThreatSeverity.High ? "warning" : 
+                                                       alert.Severity == ThreatSeverity.Medium ? "info" : "success")">
+                                        @alert.Count
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Sidebar -->
+    <div class="sidebar" id="actionsSidebar">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-cog"></i> Actions Panel</h5>
+            <button type="button" class="btn-close btn-close-white" onclick="toggleSidebar()"></button>
+        </div>
+        <div class="card-body">
+            @foreach (var action in Model.Actions)
+            {
+                <div class="mb-3">
+                    <button class="btn btn-outline-primary w-100 text-start" onclick="executeAction('@action.Id')">
+                        <span class="me-2">@action.Icon</span>
+                        <strong>@action.Name</strong>
+                        <br>
+                        <small class="text-muted">@action.Description</small>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('actionsSidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Execute action
+        function executeAction(actionId) {
+            if (confirm('Are you sure you want to execute this action?')) {
+                fetch('/Dashboard/ExecuteAction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        actionId: actionId,
+                        parameters: {}
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Action executed successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while executing the action.');
+                });
+            }
+        }
+
+        // Auto-refresh dashboard data
+        function refreshDashboard() {
+            fetch('/Dashboard/GetDashboardStats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+                    }
+                })
+                .catch(error => console.error('Error refreshing dashboard:', error));
+        }
+
+        // Initialize
+        updateTime();
+        setInterval(updateTime, 1000);
+        setInterval(refreshDashboard, 30000); // Refresh every 30 seconds
+    </script>
+</body>
+</html> 

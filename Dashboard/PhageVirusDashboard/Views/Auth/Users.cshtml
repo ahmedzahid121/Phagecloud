@@ -1,0 +1,299 @@
+@model PhageVirusDashboard.Models.UserListResponse
+@{
+    ViewData["Title"] = "User Management - PhageVirus Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-users"></i> User Management</h2>
+            <p class="text-muted">Manage dashboard users and their permissions</p>
+        </div>
+        <div class="col-auto">
+            <a href="@Url.Action("CreateUser")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create User
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="mb-0">Users (@Model.TotalCount total)</h5>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search users..." id="userSearch">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Roles</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3">
+                                            @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                                            {
+                                                <img src="@user.ProfilePictureUrl" class="rounded-circle" width="40" height="40" alt="@user.FullName">
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <strong>@user.FullName</strong>
+                                            <br>
+                                            <small class="text-muted">@user.Username</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>@(user.Department ?? "N/A")</td>
+                                <td>
+                                    @foreach (var roleId in user.RoleIds.Take(2))
+                                    {
+                                        <span class="badge bg-primary me-1">@roleId</span>
+                                    }
+                                    @if (user.RoleIds.Count > 2)
+                                    {
+                                        <span class="badge bg-secondary">+@(user.RoleIds.Count - 2) more</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsLocked)
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-lock me-1"></i>Locked
+                                        </span>
+                                    }
+                                    else if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-pause me-1"></i>Inactive
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.LastLoginAt.HasValue)
+                                    {
+                                        <small>@user.LastLoginAt.Value.ToString("MMM dd, yyyy HH:mm")</small>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">Never</small>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="@Url.Action("EditUser", new { id = user.Id })" class="btn btn-sm btn-outline-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-info" onclick="viewUserDetails('@user.Id')" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        @if (user.IsLocked)
+                                        {
+                                            <button type="button" class="btn btn-sm btn-outline-success" onclick="unlockUser('@user.Id')" title="Unlock">
+                                                <i class="fas fa-unlock"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="lockUser('@user.Id')" title="Lock">
+                                                <i class="fas fa-lock"></i>
+                                            </button>
+                                        }
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser('@user.Id', '@user.FullName')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="User pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Users", new { page = Model.PageNumber - 1 })">Previous</a>
+                        </li>
+                        
+                        @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Users", new { page = i })">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Users", new { page = Model.PageNumber + 1 })">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- User Details Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">User Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="userDetailsContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search functionality
+    document.getElementById('userSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // User actions
+    function viewUserDetails(userId) {
+        // Load user details via AJAX
+        fetch(`/Auth/GetUserDetails/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('userDetailsContent').innerHTML = data.html;
+                    new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+                } else {
+                    alert('Error loading user details: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error loading user details');
+            });
+    }
+
+    function lockUser(userId) {
+        if (confirm('Are you sure you want to lock this user?')) {
+            fetch('/Auth/LockUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error locking user');
+            });
+        }
+    }
+
+    function unlockUser(userId) {
+        if (confirm('Are you sure you want to unlock this user?')) {
+            fetch('/Auth/UnlockUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error unlocking user');
+            });
+        }
+    }
+
+    function deleteUser(userId, userName) {
+        if (confirm(`Are you sure you want to delete user "${userName}"? This action cannot be undone.`)) {
+            fetch('/Auth/DeleteUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting user');
+            });
+        }
+    }
+</script> 
